@@ -1,7 +1,38 @@
 from flask import Flask, render_template
+import time
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
+
+class Washer:
+    def __init__ (self, state, endTime, ):
+        self.state = state
+        
+        startTime = time.time()
+        endTime = startTime + 1740
+        
+
+class Dryer:
+    def __init__ (self, state, timer):
+        self.state = state
+        self.timer = timer
+
+    def add_time ()
+        self.timer 
+
+    
+class Building:
+    def __init__(self, Washer, Dryer, Chat_Memory, WasherNum, DryerNum):
+        self.machines = []
+        self.chat_Memory = []
+        self.washer_num = 0
+        self.dryer_num = 0
+
+    def machine_add (machine):
+        self.machines.append(machine)
+        
+
+    
 
 @app.route("/") #home page
 def index():
