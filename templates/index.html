@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-
 <html>
-    <body>
-        <h1>Buildings</h1>
-        <ul>
-            {% for buildingVar in buildings %}
-            <li> <a href="/{{ buildingVar }}">{{ buildingVar }}</a> </li> <!--make a list of building that are links to their respective pages-->
-            {% endfor %}
-        </ul>
-    </body>
+<head>
+    <title>Buildings</title>
+</head>
+<body>
+    <h1>Buildings</h1>
+    <ul>
+        {% for buildingVar in buildings %}
+        <li><a href="/{{ buildingVar }}">{{ buildingVar }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
 </html>

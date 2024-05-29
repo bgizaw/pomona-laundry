@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-
 <html>
-    <body>
-        <h1>Machines</h1>
+<head>
+    <title>Machines</title>
+</head>
+<body>
+    <h1>Machines</h1>
+    <ul>
         {% for machineVar in machines %}
-        <li> {{ machineVar }} </li>
+        <li>{{ machineVar }}</li>
         {% endfor %}
-    </body>
+    </ul>
+</body>
 </html>
-
