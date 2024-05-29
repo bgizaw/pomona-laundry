@@ -3,6 +3,9 @@
 <html>
     <body>
         <h1>Machines</h1>
-        <a href="/Machine">Machine</a>
+        {% for machineVar in machines %}
+        <li> {{ machineVar }} </li>
+        {% endfor %}
     </body>
 </html>
+

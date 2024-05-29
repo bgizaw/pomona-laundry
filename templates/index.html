@@ -5,7 +5,7 @@
         <h1>Buildings</h1>
         <ul>
             {% for buildingVar in buildings %}
-            <li><a href="/building/{{ buildingVar }}">{{ buildingVar }}</a> </li> <!--make a list of building that are linkes to their respective pages-->
+            <li> <a href="/{{ buildingVar }}">{{ buildingVar }}</a> </li> <!--make a list of building that are links to their respective pages-->
             {% endfor %}
         </ul>
     </body>
