@@ -28,7 +28,8 @@ class Building:
     def add_machine(self, machine):
         self.machines.append(machine)
 
-@app.route("/")  # Home page
+# Home page
+@app.route("/")
 def index():
     buildings = [
         'Sontag', 'Dialynas', 'Norton', 'Lawry', 'Clark 1', 'Clark 3',
@@ -37,10 +38,14 @@ def index():
     ]
     return render_template('index.html', buildings=buildings)
 
-@app.route('/<building>')  # Page of machines for given building
+# Page of machines for given building
+@app.route('/<building>')
 def buildingFunc(building):
     machines = ['Washer1', 'Washer2', 'Washer3', 'Washer4', 'Dryer1', 'Dryer2', 'Dryer3', 'Dryer4']
     return render_template('building.html', machines=machines)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="127.0.0.1", port=5000) #debug=True allows for auto updates. without this you need to restart server to see updates
+    # debug=True allows for auto updates. 
+    # Without this you need to restart server to see updates.
+    # Moreover, our port is currently on 8000.
+    app.run(debug=True, host="127.0.0.1", port=8000)
