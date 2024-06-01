@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Machines</title>
-</head>
+    
 <body>
-    <h1>Machines</h1>
-    <h2></h2>
+    <h1>{{ currBuilding.name }} Machines</h1>
+    {% for washer_number in range(currBuilding.washer_num) %}
+        <li><a href="/{{currBuilding.name}}/Washer{{washer_number + 1}}">Washer {{washer_number + 1}}</a></li>
+        {% endfor %}
+
+    {% for dryer_number in range(currBuilding.dryer_num) %}
+        <li><a href="/{{currBuilding.name}}/Dryer{{dryer_number + 1}}">Dryer {{dryer_number + 1}}</a></li>
+        {% endfor %}
 </body>
+</head>
 </html>

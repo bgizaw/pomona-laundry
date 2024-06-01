@@ -6,9 +6,11 @@
 <body>
     <h1>Buildings</h1>
     <ul>
-        {% for buildingVar in buildings %}
-        <li><a href="/{{ buildingVar }}">{{ buildingVar }}</a></li>
+
+        {% for building in buildings %}
+        <li><a href="/{{ building.name }}">{{ building.name }}</a></li>
         {% endfor %}
+        <!-- {{ buildings }} -->
     </ul>
 </body>
 <script>
