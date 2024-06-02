@@ -8,3 +8,4 @@ __pycache__/
 
 # Ignore Python virtual environments
 env/
+env/*
