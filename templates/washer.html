@@ -5,8 +5,62 @@
 </head>
 <body>
     {{content}}
+
+    <!-- <form method=post action=/update-state>
+        <textarea name=mytext></textarea>
+        <input type=submit name=save value=save>
+        <input type="number" pattern="[0-9]*" />
+    </form> -->
+
+    <form method=post action=/update-state>
+        <fieldset>
+          <legend>Machine State?</legend>
+          <div>
+            <input type="radio" id="available" name="status" value= "{{building}}, {{washer}}, Available">
+            <label for="available3">Available</label>
+          </div>
+          <div>
+            <input type="radio" id="unavailable" name="status" value="{{building}}, {{washer}}, Unavailable">
+            <label for="unavailable">Unavailable</label>
+          </div>
+          <div>
+            <input type="radio" id="reserved" name="status" value="{{building}}, {{washer}}, Reserved">
+            <label for="reserved">Reserved</label>
+          </div>
+          <div>
+            <input type="radio" id="out-of-order" name="status" value="{{building}}, {{washer}}, Out-of-Order">
+            <label for="out-of-order">Out of Order</label>
+          </div>
+          <div>
+            <input type="radio" id="pending" name="status" value="{{building}}, {{washer}}, Pending">
+            <label for="pending">Pending</label>
+          </div>
+          <div>
+            <button type="submit">Submit form</button>
+          </div>
+          </fieldset>
+        </form>
+
+        <form method=post action=/update-time>
+            <fieldset>
+              <legend>Machine Time?</legend>
+              <div>
+                <input type="radio" id="low" name="Time" value= "{{building}}, {{washer}}, 23">
+                <label for="available3">23</label>
+              </div>
+              <div>
+                <input type="radio" id="medium" name="Time" value="{{building}}, {{washer}}, 26">
+                <label for="unavailable">26</label>
+              </div>
+              <div>
+                <input type="radio" id="high" name="Time" value="{{building}}, {{washer}}, 29">
+                <label for="reserved">29</label>
+              <div>
+                <button type="submit">Submit form</button>
+              </div>
+              </fieldset>
+            </form>
+
 </body>
-<script>
-    
-</script>
+
 </html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import time
 from typing import List
 import json
@@ -119,11 +119,11 @@ def washerFunc(building, washer):
     
     with open(f"{newpath}machine_info.txt", 'r') as file:
         content = file.read()
-    return render_template('washer.html', content = content)
+    return render_template('washer.html', content = content, building=building, washer=washer)
 
 # Page for dryer
 @app.route('/<building>/<dryer>')
-def washerFunc(building, dryer):
+def dryerFunc(building, dryer):
     # creating a folder when someone goes to the dryer
     newpath = f"buildings/{building}/{dryer}/"
     if not os.path.exists(newpath):
@@ -136,6 +136,51 @@ def washerFunc(building, dryer):
     with open(f"{newpath}machine_info.txt", 'r') as file:
         content = file.read()
     return render_template('dryer.html', content = content)
+
+# available, unavailable, pending, reserved, and out of order
+@app.route('/update-state', methods=['POST'])
+def updateStateFunc():
+    if request.method == 'POST':
+        information = request.form.getlist('status')[0].split(', ')
+        building = information[0]
+        washer = information[1]
+        choice = information[2]
+        fullpath = f"buildings/{building}/{washer}/machine_info.txt"
+        with open(fullpath, 'r') as file:
+             data = file.readlines()
+        
+        with open(fullpath, "w") as file:
+             data[0] = f'Status: {choice}\n'
+             data[1] = f'Current Time: 0\n'
+             file.writelines(data)
+        
+        with open(fullpath, 'r') as file:
+            content = file.read()
+        
+        return render_template('washer.html', content = content, building=building, washer=washer)
+
+@app.route('/update-time', methods=['POST'])
+def updateWasherTimeFunc():
+    if request.method == 'POST':
+        information = request.form.getlist('Time')[0].split(', ')
+        building = information[0]
+        washer = information[1]
+        choice = information[2]
+        fullpath = f"buildings/{building}/{washer}/machine_info.txt"
+        with open(fullpath, 'r') as file:
+             data = file.readlines()
+        
+        with open(fullpath, "w") as file:
+             data[0] = f'Status: Unavailable\n'
+             data[1] = f'Current Time: {choice}\n'
+             file.writelines(data)
+        
+        with open(fullpath, 'r') as file:
+            content = file.read()
+        
+        return render_template('washer.html', content = content, building=building, washer=washer)
+
+
 
 if __name__ == "__main__":
     # debug=True allows for auto updates. 
