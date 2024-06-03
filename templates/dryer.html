@@ -4,6 +4,47 @@
     <title>Machine Info</title>
 </head>
 <body>
+    <form method=post action=/update-dryer-state>
+        <fieldset>
+          <legend>Machine State?</legend>
+          <div>
+            <input type="radio" id="available" name="status" value= "{{building}}, {{dryer}}, Available">
+            <label for="available3">Available</label>
+          </div>
+          <div>
+            <input type="radio" id="unavailable" name="status" value="{{building}}, {{dryer}}, Unavailable">
+            <label for="unavailable">Unavailable</label>
+          </div>
+          <div>
+            <input type="radio" id="reserved" name="status" value="{{building}}, {{dryer}}, Reserved">
+            <label for="reserved">Reserved</label>
+          </div>
+          <div>
+            <input type="radio" id="out-of-order" name="status" value="{{building}}, {{dryer}}, Out-of-Order">
+            <label for="out-of-order">Out of Order</label>
+          </div>
+          <div>
+            <input type="radio" id="pending" name="status" value="{{building}}, {{dryer}}, Pending">
+            <label for="pending">Pending</label>
+          </div>
+          <div>
+            <button type="submit">Submit form</button>
+          </div>
+          </fieldset>
+        </form>
+
+        <form method=post action=/update-dryer-time>
+            <fieldset>
+              <legend>Machine Time?</legend>
+              <div>
+                <input type="radio" id="in-use" name="Time" value= "{{building}}, {{dryer}}, 45">
+                <label for="available">45</label>
+              </div>
+                <button type="submit">Submit form</button>
+              </div>
+              </fieldset>
+            </form>
+
     {{content}}
 </body>
 <script>

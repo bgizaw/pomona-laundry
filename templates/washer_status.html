@@ -6,11 +6,6 @@
 <body>
     {{content}}
 
-    <!-- <form method=post action=/update-state>
-        <textarea name=mytext></textarea>
-        <input type=submit name=save value=save>
-        <input type="number" pattern="[0-9]*" />
-    </form> -->
 
     <form method=post action=/update-washer-state>
         <fieldset>
@@ -40,26 +35,6 @@
           </div>
           </fieldset>
         </form>
-
-        <form method=post action=/update-time>
-            <fieldset>
-              <legend>Machine Time?</legend>
-              <div>
-                <input type="radio" id="low" name="Time" value= "{{building}}, {{washer}}, 23">
-                <label for="available3">23</label>
-              </div>
-              <div>
-                <input type="radio" id="medium" name="Time" value="{{building}}, {{washer}}, 26">
-                <label for="unavailable">26</label>
-              </div>
-              <div>
-                <input type="radio" id="high" name="Time" value="{{building}}, {{washer}}, 29">
-                <label for="reserved">29</label>
-              <div>
-                <button type="submit">Submit form</button>
-              </div>
-              </fieldset>
-            </form>
 
 </body>
 
