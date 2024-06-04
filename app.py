@@ -95,8 +95,23 @@ def buildingFunc(building):
     return render_template('building.html', "Error: Building Not Found")
 
 #Page for washer
+# @app.route('/<building>/<washer>')
+# def washerFunc(building, washer):
+#     # creating a folder when someone goes to the washer
+#     newpath = f"buildings/{building}/{washer}/"
+#     if not os.path.exists(newpath):
+#         os.makedirs(newpath)
+#         file = open(f"{newpath}machine_info.txt", 'w')
+#         file.write("Status: Available\n")
+#         file.write("Current Time: 0\n")
+#         file.close()
+    
+#     with open(f"{newpath}machine_info.txt", 'r') as file:
+#         content = file.read()
+#     return render_template('washer.html', content = content, building=building, washer=washer)
+
 @app.route('/<building>/<washer>')
-def washerFunc(building, washer):
+def updateWasherStatus2(building, washer):
     # creating a folder when someone goes to the washer
     newpath = f"buildings/{building}/{washer}/"
     if not os.path.exists(newpath):
@@ -108,7 +123,8 @@ def washerFunc(building, washer):
     
     with open(f"{newpath}machine_info.txt", 'r') as file:
         content = file.read()
-    return render_template('washer.html', content = content, building=building, washer=washer)
+    return render_template('washer_status.html', content = content, building= building, washer= washer)
+
 
 # Page for dryer
 @app.route('/<building>/<dryer>')
@@ -134,6 +150,10 @@ def updateWasherStateFunc():
         building = information[0]
         washer = information[1]
         choice = information[2]
+
+        if choice == 'In Use':
+             return render_template('washer_time.html', content = content, building=building, washer=washer)
+
         fullpath = f"buildings/{building}/{washer}/machine_info.txt"
         with open(fullpath, 'r') as file:
              data = file.readlines()
@@ -211,23 +231,6 @@ def updateDryerTimeFunc():
             content = file.read()
         
         return render_template('dryer.html', content = content, building=building, dryer=dryer)
-
-@app.route('/check_washer_status2')
-def updateWasherStatus2():
-    building = 'Sontag'
-    washer = 'Washer1'
-    # creating a folder when someone goes to the washer
-    newpath = f"buildings/{building}/{washer}/"
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
-        file = open(f"{newpath}machine_info.txt", 'w')
-        file.write("Status: Available\n")
-        file.write("Current Time: 0\n")
-        file.close()
-    
-    with open(f"{newpath}machine_info.txt", 'r') as file:
-        content = file.read()
-    return render_template('washer_status.html', content = content, building= building, washer= washer)
 
 
 if __name__ == "__main__":

@@ -9,13 +9,13 @@
 
     <form method=post action=/update-washer-state>
         <fieldset>
-          <legend>Machine State?</legend>
+          <legend>Washer State?</legend>
           <div>
             <input type="radio" id="available" name="status" value= "{{building}}, {{washer}}, Available">
             <label for="available3">Available</label>
           </div>
           <div>
-            <input type="radio" id="unavailable" name="status" value="{{building}}, {{washer}}, Unavailable">
+            <input type="radio" id="In-Use" name="status" value="{{building}}, {{washer}}, In Use">
             <label for="unavailable">Unavailable</label>
           </div>
           <div>
@@ -27,7 +27,7 @@
             <label for="out-of-order">Out of Order</label>
           </div>
           <div>
-            <input type="radio" id="pending" name="status" value="{{building}}, {{washer}}, Pending">
+            <input type="radio" id="Clothes in Machine" name="status" value="{{building}}, {{washer}}, Clothes In Machine">
             <label for="pending">Pending</label>
           </div>
           <div>
