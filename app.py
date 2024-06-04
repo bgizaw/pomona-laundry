@@ -1,24 +1,20 @@
-from flask import Flask, render_template
-import time
+from flask import Flask, render_template, request
+import datetime
+from typing import List
 import json
 import os
 
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
-
 class Washer:
-    def __init__(self, state, time_remaining=0):
+    def __init__(self, state, end_time):
         self.state = state
-        self.time_remaining = time_remaining
+        self.end_time = end_time
 
-    def start_washer(self):
-        start_time = time.time()
-        end_time = self.start_time + 1740  # 1740 seconds = 29 minutes
-        self.time_remaining = end_time - start_time
-
-    def countdown(self):
-        time.sleep(1)
-        self.time_remaining -= 1
+    def start_washer(self, setting):
+        start_time = datetime.datetime.now()
+        time_change = datetime.timedelta(minutes=setting)
+        self.end_time = start_time + time_change
 
     def change_state(self, state):
         #state should be an integer
@@ -37,15 +33,19 @@ class Washer:
     def __str__(self) -> str:
         return "Washer:" + " " + self.state + " " + "-" + self.time_remaining
         
-
-
 class Dryer:
-    def __init__(self, state, timer=0):
+    def __init__(self, state, end_time):
         self.state = state
-        self.timer = timer
+        self.end_time = end_time
+
+    def start_dryer(self, setting):
+        start_time = datetime.datetime.now()
+        time_change = datetime.timedelta(minutes=setting)
+        self.end_time = start_time + time_change
 
     def add_time(self, additional_time):
-        self.timer += additional_time
+        time_change = datetime.timedelta(minutes=additional_time)
+        self.end_time += additional_time
 
     def __str__(self) -> str:
         return "Dryer:" + " " + self.state + " " + "-" + self.timer
@@ -73,21 +73,11 @@ class Building:
     def __str__(self):
         return "Building: " + self.name + "  " + "washers: " + str(self.washer_num) + "  " + "dryers: " + str(self.dryer_num)
 
-        
-
-    
-
 with open("templates/machineInfo.json", "r") as json_file:
     data = json.load(json_file)
 
 building_list = [Building(item['building'], item['washers'], item['dryers'])
                  for item in data]
-
-
-
-
-
-    
 
 # Home page
 @app.route("/")
@@ -118,11 +108,11 @@ def washerFunc(building, washer):
     
     with open(f"{newpath}machine_info.txt", 'r') as file:
         content = file.read()
-    return render_template('washer.html', content = content)
+    return render_template('washer.html', content = content, building=building, washer=washer)
 
 # Page for dryer
 @app.route('/<building>/<dryer>')
-def washerFunc(building, dryer):
+def dryerFunc(building, dryer):
     # creating a folder when someone goes to the dryer
     newpath = f"buildings/{building}/{dryer}/"
     if not os.path.exists(newpath):
@@ -136,10 +126,112 @@ def washerFunc(building, dryer):
         content = file.read()
     return render_template('dryer.html', content = content)
 
+# available, unavailable, pending, reserved, and out of order
+@app.route('/update-washer-state', methods=['POST'])
+def updateWasherStateFunc():
+    if request.method == 'POST':
+        information = request.form.getlist('status')[0].split(', ')
+        building = information[0]
+        washer = information[1]
+        choice = information[2]
+        fullpath = f"buildings/{building}/{washer}/machine_info.txt"
+        with open(fullpath, 'r') as file:
+             data = file.readlines()
+        
+        with open(fullpath, "w") as file:
+             data[0] = f'Status: {choice}\n'
+             data[1] = f'Current Time: 0\n'
+             file.writelines(data)
+        
+        with open(fullpath, 'r') as file:
+            content = file.read()
+        
+        return render_template('washer.html', content = content, building=building, washer=washer)
+
+@app.route('/update-washer-time', methods=['POST'])
+def updateWasherTimeFunc():
+    if request.method == 'POST':
+        information = request.form.getlist('Time')[0].split(', ')
+        building = information[0]
+        washer = information[1]
+        choice = information[2]
+        fullpath = f"buildings/{building}/{washer}/machine_info.txt"
+        with open(fullpath, 'r') as file:
+             data = file.readlines()
+        
+        with open(fullpath, "w") as file:
+             data[0] = f'Status: Unavailable\n'
+             data[1] = f'Current Time: {choice}\n'
+             file.writelines(data)
+        
+        with open(fullpath, 'r') as file:
+            content = file.read()
+        
+        return render_template('washer.html', content = content, building=building, washer=washer)
+    
+
+@app.route('/update-dryer-state', methods=['POST'])
+def updateDryerStateFunc():
+    if request.method == 'POST':
+        information = request.form.getlist('status')[0].split(', ')
+        building = information[0]
+        dryer = information[1]
+        choice = information[2]
+        fullpath = f"buildings/{building}/{dryer}/machine_info.txt"
+        with open(fullpath, 'r') as file:
+             data = file.readlines()
+        
+        with open(fullpath, "w") as file:
+             data[0] = f'Status: {choice}\n'
+             data[1] = f'Current Time: 0\n'
+             file.writelines(data)
+        
+        with open(fullpath, 'r') as file:
+            content = file.read()
+        
+        return render_template('dryer.html', content = content, building=building, dryer=dryer)
+
+@app.route('/update-dryer-time', methods=['POST'])
+def updateDryerTimeFunc():
+    if request.method == 'POST':
+        information = request.form.getlist('Time')[0].split(', ')
+        building = information[0]
+        dryer = information[1]
+        choice = information[2]
+        fullpath = f"buildings/{building}/{dryer}/machine_info.txt"
+        with open(fullpath, 'r') as file:
+             data = file.readlines()
+        
+        with open(fullpath, "w") as file:
+             data[0] = f'Status: Unavailable\n'
+             data[1] = f'Current Time: {choice}\n'
+             file.writelines(data)
+        
+        with open(fullpath, 'r') as file:
+            content = file.read()
+        
+        return render_template('dryer.html', content = content, building=building, dryer=dryer)
+
+@app.route('/check_washer_status2')
+def updateWasherStatus2():
+    building = 'Sontag'
+    washer = 'Washer1'
+    # creating a folder when someone goes to the washer
+    newpath = f"buildings/{building}/{washer}/"
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+        file = open(f"{newpath}machine_info.txt", 'w')
+        file.write("Status: Available\n")
+        file.write("Current Time: 0\n")
+        file.close()
+    
+    with open(f"{newpath}machine_info.txt", 'r') as file:
+        content = file.read()
+    return render_template('washer_status.html', content = content, building= building, washer= washer)
+
 
 if __name__ == "__main__":
     # debug=True allows for auto updates. 
     # Without this you need to restart server to see updates.
     # Moreover, our port is currently on 8000.
     app.run(debug=True, host="127.0.0.1", port=8000)
-    print("done")
