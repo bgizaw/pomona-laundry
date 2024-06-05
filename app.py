@@ -4,6 +4,7 @@ from typing import List
 import json
 import os
 
+
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
 class Washer:
@@ -35,7 +36,8 @@ class Washer:
 
     def __str__(self) -> str:
         return "Washer:" + " " + self.state + " " + "-" + self.time_remaining
-        
+
+
 class Dryer:
     def __init__(self, state, end_time):
         self.state = state
@@ -52,6 +54,7 @@ class Dryer:
 
     def __str__(self) -> str:
         return "Dryer:" + " " + self.state + " " + "-" + self.timer
+
 
 class Building:
     def __init__(self, name, washer_num, dryer_num):
@@ -82,10 +85,12 @@ with open("templates/machineInfo.json", "r") as json_file:
 building_list = [Building(item['building'], item['washers'], item['dryers'])
                  for item in data]
 
+
 # Home page
 @app.route("/")
 def index():
     return render_template('index.html', buildings=building_list)
+
 
 # Page of machines for given building
 @app.route('/<building>')
@@ -96,6 +101,7 @@ def buildingFunc(building):
             return render_template('building.html', currBuilding=building_item)
     # fix error handling at some point
     return render_template('building_error.html')
+
 
 #Page for washer
 # @app.route('/<building>/<washer>')
@@ -113,8 +119,13 @@ def buildingFunc(building):
 #         content = file.read()
 #     return render_template('washer.html', content = content, building=building, washer=washer)
 
+
+
+"""
+**Washer Logic**
+"""
 @app.route('/<building>/<washer>', methods=['GET'])
-def updateWasherStatus2(building, washer):
+def updateWasherFileData(building, washer):
     # creating a folder when someone goes to the washer
     newpath = f"buildings/{building}/{washer}/"
     if request.method == 'GET':
@@ -148,22 +159,6 @@ def updateWasherStatus2(building, washer):
     return render_template('washer_status.html', content = content, building= building, washer= washer)
 
 
-# Page for dryer
-@app.route('/<building>/<dryer>')
-def dryerFunc(building, dryer):
-    # creating a folder when someone goes to the dryer
-    newpath = f"buildings/{building}/{dryer}/"
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
-        file = open(f"{newpath}machine_info.txt", 'w')
-        file.write("Status: Available\n")
-        file.write("Completion Time: 0\n")
-        file.close()
-    
-    with open(f"{newpath}machine_info.txt", 'r') as file:
-        content = file.read()
-    return render_template('dryer.html', content = content)
-
 # available, unavailable, pending, reserved, and out of order
 @app.route('/update-washer-state', methods=['POST'])
 def updateWasherStateFunc():
@@ -193,6 +188,7 @@ def updateWasherStateFunc():
             content = file.read()
         
         return render_template('washer.html', content = content, building=building, washer=washer)
+
 
 # this function is only for in-use logic
 @app.route('/update-washer-time', methods=['POST'])
@@ -225,6 +221,66 @@ def updateWasherTimeFunc():
         return render_template('washer_status.html', content = content, building=building, washer=washer)
     
 
+
+
+"""
+**Dryer logic**
+"""
+
+
+
+# Page for dryer
+# @app.route('/<building>/<dryer>')
+# def dryerFunc(building, dryer):
+#     # creating a folder when someone goes to the dryer
+#     newpath = f"buildings/{building}/{dryer}/"
+#     if not os.path.exists(newpath):
+#         os.makedirs(newpath)
+#         file = open(f"{newpath}machine_info.txt", 'w')
+#         file.write("Status: Available\n")
+#         file.write("Completion Time: 0\n")
+#         file.close()
+    
+#     with open(f"{newpath}machine_info.txt", 'r') as file:
+#         content = file.read()
+#     return render_template('dryer.html', content = content)
+
+
+@app.route('/<building>/<dryer>', methods=['GET'])
+def updateDryerFileData(building, dryer):
+    # creating a folder when someone goes to the dryer
+    newpath = f"buildings/{building}/{dryer}/"
+    if request.method == 'GET':
+        if not os.path.exists(newpath):
+            os.makedirs(newpath)
+            file = open(f"{newpath}machine_info.txt", 'w')
+            file.write("Status: Available\n")
+            file.write("Completion Time: 0\n")
+            file.close()
+        else:
+            with open(f"{newpath}/machine_info.txt", 'r') as file:
+                data = file.readlines()
+            
+            time_data = data[1].split('Completion Time:')
+            time_list = time_data[1].strip().split('/')
+            completion_time = datetime.datetime(int(time_list[0]),int(time_list[1]), int(time_list[2]), int(time_list[3]), int(time_list[4]), int(time_list[5]))
+            time_remaining = completion_time - datetime.datetime.now() 
+            
+ 
+            if len(data) == 3:
+                data[2] = f"Time Remaining: {time_remaining}\n"
+            else:
+                data.append(f"Time Remaining: {time_remaining}\n")
+
+            with open(f'{newpath}/machine_info.txt', "w") as file:
+                file.writelines(data)
+
+    with open(f'{newpath}/machine_info.txt', 'r') as file:
+        content = file.read()
+            
+    return render_template('dryer_status.html', content = content, building= building, dryer= dryer)
+
+
 @app.route('/update-dryer-state', methods=['POST'])
 def updateDryerStateFunc():
     if request.method == 'POST':
@@ -244,7 +300,8 @@ def updateDryerStateFunc():
         with open(fullpath, 'r') as file:
             content = file.read()
         
-        return render_template('dryer.html', content = content, building=building, dryer=dryer)
+        return render_template('dryer_status.html', content = content, building=building, dryer=dryer)
+    
 
 @app.route('/update-dryer-time', methods=['POST'])
 def updateDryerTimeFunc():
