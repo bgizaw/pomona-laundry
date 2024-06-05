@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Machine Info</title>
+</head>
+<body>
+    {{content}}
+
+
+    <form method=post action=/update-washer-state>
+        <fieldset>
+          <legend>Washer State?</legend>
+          <!-- <div>
+            <input type="radio" id="available" name="status" value= "{{building}}, {{washer}}, Available">
+            <label for="available3">Available</label>
+          </div> -->
+          <div>
+            <input type="radio" id="In Use" name="status" value="{{building}}, {{washer}}, In Use">
+            <label for="unavailable">In Use</label>
+          </div>
+          <!-- <div>
+            <input type="radio" id="reserved" name="status" value="{{building}}, {{washer}}, Reserved">
+            <label for="reserved">Reserved</label>
+          </div> -->
+          <div>
+            <input type="radio" id="out-of-order" name="status" value="{{building}}, {{washer}}, Out-of-Order">
+            <label for="out-of-order">Out of Order</label>
+          </div>
+          <div>
+            <input type="radio" id="Clothes in Machine" name="status" value="{{building}}, {{washer}}, pending">
+            <label for="pending">Cycle is completed, but clothes may still be in machine</label>
+          </div>
+          <div>
+            <button type="submit">Submit form</button>
+          </div>
+          </fieldset>
+        </form>
+
+</body>
+
+</html>

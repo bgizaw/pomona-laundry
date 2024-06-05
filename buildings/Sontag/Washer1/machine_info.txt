@@ -1,2 +1,2 @@
-Status: Available
-Current Time: 0
+Status: pending
+Completion Time: 0

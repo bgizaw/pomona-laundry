@@ -5,25 +5,17 @@
 </head>
 <body>
     <h1>Buildings</h1>
-    
-
         {% for building in buildings %}
-        <a href="/{{ building.name }}" 
-        style=
-        "display: inline-block; 
-        position: relative; 
-        width: 100px; 
-        height: 100px">{{ building.name }}
-        
-            <!-- <span style="position: absolute; top: 0; left: 0">{{ building.name }}</span> -->
-            <div>
-                
-            </div>
-
-        </a>
+            <a href="/{{ building.name }}" 
+            style=
+            "display: inline-block; 
+            width: 100px; 
+            height: 100px">{{ building.name }}
+                <div>
+                    
+                </div>
+            </a>
         {% endfor %}
-        <!-- {{ buildings }} -->
-    
 </body>
 <style>
     div{
@@ -32,9 +24,7 @@
     background-color: black;
     display: inline-block;
     margin-bottom: 50px;
+    border-radius: 10px;
     }
 </style>
-<script>
-    
-</script>
 </html>
