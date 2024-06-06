@@ -5,11 +5,11 @@
 <body>
     <h1>{{ currBuilding.name }} Machines</h1>
     {% for washer_number in range(currBuilding.washer_num) %}
-        <li><a href="/{{currBuilding.name}}/Washer{{washer_number + 1}}">Washer {{washer_number + 1}}</a></li>
+        <li><a href="/washer/{{currBuilding.name}}/Washer{{washer_number + 1}}">Washer {{washer_number + 1}}</a></li>
         {% endfor %}
 
     {% for dryer_number in range(currBuilding.dryer_num) %}
-        <li><a href="/{{currBuilding.name}}/Dryer{{dryer_number + 1}}">Dryer {{dryer_number + 1}}</a></li>
+        <li><a href="/dryer/{{currBuilding.name}}/Dryer{{dryer_number + 1}}">Dryer {{dryer_number + 1}}</a></li>
         {% endfor %}
 </body>
 </head>

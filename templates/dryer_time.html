@@ -13,6 +13,11 @@
                 <input type="radio" id="start" name="Time" value="{{building}}, {{dryer}}, 45">
                 <label for="reserved">45</label>
               <div>
+              <div>
+                <label for="reserved">Additional Time</label>
+                <input type="number" id="additional-time" step="24" min="0" max="72" name="additional-time" value="{{building}}, {{dryer}}, 24" required>
+                
+              <div>
                 <button type="submit">Submit form</button>
               </div>
               </fieldset>

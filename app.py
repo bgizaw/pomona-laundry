@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 import datetime
 from typing import List
 import json
@@ -124,7 +124,7 @@ def buildingFunc(building):
 """
 **Washer Logic**
 """
-@app.route('/<building>/<washer>', methods=['GET'])
+@app.route('/washer/<building>/<washer>/', methods=['GET'])
 def updateWasherFileData(building, washer):
     # creating a folder when someone goes to the washer
     newpath = f"buildings/{building}/{washer}/"
@@ -246,7 +246,7 @@ def updateWasherTimeFunc():
 #     return render_template('dryer.html', content = content)
 
 
-@app.route('/<building>/<dryer>', methods=['GET'])
+@app.route('/dryer/<building>/<dryer>', methods=['GET'])
 def updateDryerFileData(building, dryer):
     # creating a folder when someone goes to the dryer
     newpath = f"buildings/{building}/{dryer}/"
@@ -289,6 +289,15 @@ def updateDryerStateFunc():
         dryer = information[1]
         choice = information[2]
         fullpath = f"buildings/{building}/{dryer}/machine_info.txt"
+        
+        if choice == 'In Use':
+            with open(fullpath, 'r') as file:
+                content = file.read()
+            return render_template('dryer_time.html', content = content, building=building, dryer=dryer)
+        elif choice == "Out-of-Order":
+            return redirect('https://pomona.webtma.com/?tkn=zR_pJHKh9JP45Xg9RPojIH2irxyiuxkXCrWY6I1oLlEMORHMSIfRo8C50hsmXjJNq3CC4shHe74IdVLeZelp9ZkWK50Q_luNhA7JFwQ6Lx2OfJd_pFK2rvhrrqeXGqLQywWvEnvUiNo4WgeJcevA2BSHiAXEKNTLwt39ZqtjT4fFs-oTtdZ1O0gv8UN-bLkhcSL7eqRIxeuVbG7ytk3eR5US9MexRJDmTpn6bAkOr0OvwjXtkjGGCJz3uj6jDN_6qPl4d7lOptkG5EDbRxzGXg')
+
+        
         with open(fullpath, 'r') as file:
              data = file.readlines()
         
@@ -300,17 +309,25 @@ def updateDryerStateFunc():
         with open(fullpath, 'r') as file:
             content = file.read()
         
-        return render_template('dryer_status.html', content = content, building=building, dryer=dryer)
+    
+        
+        return render_template('dryer.html', content = content, building=building, dryer=dryer)
     
 
 @app.route('/update-dryer-time', methods=['POST'])
 def updateDryerTimeFunc():
     if request.method == 'POST':
         information = request.form.getlist('Time')[0].split(', ')
+    
         building = information[0]
         dryer = information[1]
-        choice = information[2]
+        choice = int(information[2])
+        add_time = int(request.form.get("additional-time"))
+        choice = choice + add_time
+        
         fullpath = f"buildings/{building}/{dryer}/machine_info.txt"
+
+
         with open(fullpath, 'r') as file:
              data = file.readlines()
         
@@ -322,7 +339,7 @@ def updateDryerTimeFunc():
         with open(fullpath, 'r') as file:
             content = file.read()
         
-        return render_template('dryer.html', content = content, building=building, dryer=dryer)
+        return render_template('dryer_status.html', content = content, building=building, dryer=dryer)
 
 
 if __name__ == "__main__":
