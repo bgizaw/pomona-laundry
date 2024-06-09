@@ -7,7 +7,12 @@ __pycache__/
 .env.*
 
 # Ignore Python virtual environments
+env/
 venv/
 
 # Ignore buildings directory
 buildings/
+
+
+
+

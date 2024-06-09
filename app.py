@@ -318,9 +318,13 @@ def updateDryerStateFunc():
 def updateDryerTimeFunc():
     if request.method == 'POST':
         information = request.form.getlist('Time')[0].split(', ')
+    
         building = information[0]
         dryer = information[1]
-        choice = information[2]
+        choice = int(information[2])
+        add_time = int(request.form.get("additional-time"))
+        choice = choice + add_time
+        
         fullpath = f"buildings/{building}/{dryer}/machine_info.txt"
 
 
