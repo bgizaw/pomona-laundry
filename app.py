@@ -109,7 +109,7 @@ class Building:
 with open("templates/machineInfo.json", "r") as json_file:
     data = json.load(json_file)
 
-# list comprehension to 
+# list comprehension to make a list of Building class objects, each representing a different laundry room
 building_list = [Building(item['building'], item['washers'], item['dryers']) 
                  for item in data]
 print(building_list[0])
